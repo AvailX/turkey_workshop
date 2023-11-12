@@ -178,12 +178,13 @@ Now, we'll proceed by installing Rust and all the CLI tools that we'll need to s
 macOS/Linux
 </summary>
 
-> [!NOTE]
-> Before blindly curl-bashing a script, it is always wise to look at it first.
 
 ```bash
 curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
+
+> [!NOTE]
+> Before blindly curl-bashing a script, it is always wise to look at it first.
 
 </details>
 
@@ -191,8 +192,10 @@ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 
 Depending on the OS we want to deploy our app to, we must add the appropriate build targets so that the Rust we compile can run on those platforms.
 
-> [!NOTE]
-> We can only build iOS apps on macOS, meaning that the targets are only installable on macOS. This workshop will be focused on Android, so that everyone can follow.
+> [!IMPORTANT]
+> We can only build iOS apps on macOS, meaning that the targets are only
+> installable on macOS. This workshop will be focused on Android, so that everyone
+> can follow.
 
 <details>
 <summary>
