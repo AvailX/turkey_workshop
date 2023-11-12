@@ -1,0 +1,15 @@
+[package]
+name = "ctf_deploy"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+snarkvm = "0.16.8"
+snarkvm-console-network = "0.16.8"
+rand = "0.8"
+ureq = "2.8"
+colored = "2"
+clap = "4.4.4"
+dyn-fmt = "0.4"
