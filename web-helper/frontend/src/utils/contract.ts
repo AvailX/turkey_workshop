@@ -1,6 +1,8 @@
+import axios from "axios"
+
 type apiResponse = {
-	contract: string,
-	private_key: string,
+	code: string,
+	pk: string,
 }
 
 const test = `program avail_ctf_goose_3.aleo {
@@ -36,9 +38,12 @@ const test = `program avail_ctf_goose_3.aleo {
 `
 
 const getGooseContract = async (): Promise<apiResponse> => {
-	return {
-		contract: test, private_key: "asd"
-	}
+
+	let res = await axios.get<apiResponse>("http://localhost:8080");
+
+	return res.data;
 }
+
+
 
 export default getGooseContract
