@@ -1,0 +1,24 @@
+[package]
+name = "api"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "4.4.0"
+anyhow = "1.0.75"
+bson = "2.7.0"
+chrono = "0.4.31"
+futures = "0.3.29"
+dyn-fmt = "0.4"
+snarkvm = "0.16.8"
+snarkvm-console-network = "0.16.8"
+mongodb = "2.7.1"
+rand = "0.8.5"
+serde = { version = "1.0.192", features = ["derive"] }
+serde_json = "1.0.108"
+actix-governor = "0.5.0"
+tracing = "0.1.40"
+tracing-subscriber = "0.3.18"
+actix-cors = "0.6.4"
