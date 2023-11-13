@@ -119,6 +119,7 @@ fn get_unique_player<R: Rng + CryptoRng>(work_path: &Path, rng: &mut R) -> Resul
     let program_secret = get_secret_code(&pk_player)?;
     write_file_line(work_path, "pk.txt", &pk_player.to_string())?;
     write_file_line(work_path, "addr.txt", &addr_player.to_string())?;
+    write_file_line(work_path, "secrets.txt", &program_secret)?;
     Ok(program_secret)
 }
 
