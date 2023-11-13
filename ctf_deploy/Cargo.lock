@@ -476,6 +476,7 @@ dependencies = [
  "colored",
  "dyn-fmt",
  "rand",
+ "reqwest",
  "snarkvm",
  "snarkvm-console-network",
  "ureq",

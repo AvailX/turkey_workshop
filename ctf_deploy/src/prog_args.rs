@@ -31,10 +31,6 @@ pub struct ProgArgs {
     #[arg(long)]
     pub count: Option<u16>,
 
-    /// Generate deployment indexes randomly
-    #[arg(long)]
-    pub rand: bool,
-
     /// Produce only the leo goose contract
     #[arg(long)]
     pub goose: bool,
