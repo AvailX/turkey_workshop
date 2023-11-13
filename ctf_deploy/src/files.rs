@@ -83,18 +83,18 @@ pub fn create_full_project(base: &Path, index: &str) -> Result<(String, String)>
     Ok(ret)
 }
 
-pub fn write_pk_file(base: &Path, pk_str: &str) -> Result<()> {
+pub fn write_file_line(base: &Path, filename: &str, line: &str) -> Result<()> {
     // write pk to file
-    let pk_file = base.join("pk.txt");
+    let file_path = base.join(filename);
 
     let mut file = OpenOptions::new()
         .write(true)
         .append(true)
         .create(true) // Create the file if it doesn't exist
-        .open(pk_file)?;
+        .open(file_path)?;
 
     // Append the line to the file
-    writeln!(file, "{}", pk_str)?;
+    writeln!(file, "{}", line)?;
 
     Ok(())
 }

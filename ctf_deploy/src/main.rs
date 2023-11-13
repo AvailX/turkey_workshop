@@ -14,7 +14,7 @@ use std::path::Path;
 
 use crate::{
     deployment::deploy,
-    files::{create_file, create_full_project, write_pk_file},
+    files::{create_file, create_full_project, write_file_line},
 };
 
 type CurrentAleo = snarkvm::circuit::AleoV0;
@@ -115,9 +115,10 @@ fn get_secret_code(pk: &PrivateKey<CurrentNetwork>) -> Result<String> {
 }
 
 fn get_unique_player<R: Rng + CryptoRng>(work_path: &Path, rng: &mut R) -> Result<String> {
-    let (pk_player, _) = new_account(rng)?;
+    let (pk_player, addr_player) = new_account(rng)?;
     let program_secret = get_secret_code(&pk_player)?;
-    write_pk_file(work_path, &pk_player.to_string())?;
+    write_file_line(work_path, "pk.txt", &pk_player.to_string())?;
+    write_file_line(work_path, "addr.txt", &addr_player.to_string())?;
     Ok(program_secret)
 }
 
