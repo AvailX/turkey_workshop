@@ -10,7 +10,7 @@ type CurrentAleo = snarkvm::circuit::AleoV0;
 type CurrentNetwork = snarkvm::prelude::Testnet3;
 
 use snarkvm::prelude::Result;
-use std::fs::{create_dir, File};
+use std::fs::{create_dir, File, OpenOptions};
 use std::path::Path;
 
 use crate::aleo_code::{
@@ -81,4 +81,20 @@ pub fn create_full_project(base: &Path, index: &str) -> Result<(String, String)>
         project.to_string_lossy().to_string(),
     );
     Ok(ret)
+}
+
+pub fn write_pk_file(base: &Path, pk_str: &str) -> Result<()> {
+    // write pk to file
+    let pk_file = base.join("pk.txt");
+
+    let mut file = OpenOptions::new()
+        .write(true)
+        .append(true)
+        .create(true) // Create the file if it doesn't exist
+        .open(pk_file)?;
+
+    // Append the line to the file
+    writeln!(file, "{}", pk_str)?;
+
+    Ok(())
 }

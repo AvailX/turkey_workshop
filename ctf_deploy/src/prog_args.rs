@@ -7,9 +7,13 @@ pub struct ProgArgs {
     #[arg(long)]
     pub path: String,
 
-    /// PK for deployment fees (default: generate new)
+    /// PK for deployment fees
     #[arg(long)]
-    pub pk: Option<String>,
+    pub pk_fees: Option<String>,
+
+    /// PK for player
+    #[arg(long)]
+    pub pk_player: Option<String>,
 
     /// Query URL (default: local node)
     #[arg(long)]
@@ -22,10 +26,6 @@ pub struct ProgArgs {
     /// Priority fee amount (default: 100000)
     #[arg(long)]
     pub fee: Option<u64>,
-
-    /// Starting/Minimum index for deployment set
-    #[arg(long)]
-    pub start: Option<u16>,
 
     /// Number of deployments
     #[arg(long)]
@@ -48,14 +48,22 @@ Example:
 
 export YOURPK=APrivateKey1zkpA9GoBwmeGxHutfB87aYZRzXxs1G8HrnNhgtFn96wcTT9
 
+# generate a player pk and deploy its goose contract
 cargo run --release  -- \
     --path ./deployments/ \
-    --pk ${{YOURPK}} \
+    --pk-fees ${{YOURPK}} \
     --query "http://localhost:3030" \
     --broadcast "http://localhost:3030/testnet3/transaction/broadcast" \
-    --fee 100000 --rand
+    --fee 100000
 
-cargo run --release  --  --path ./deployments/
+# generate a player pk and deploy its goose contract
+cargo run --release  --  --path ./deployments/  --pk-fees ${{YOURPK}}
+
+# get the goose program
+cargo run --release  --  --goose --pk-player  ${{YOURPK}}
+
+# get the countryman program
+cargo run --release  --  --countryman --pk-player  ${{YOURPK}}
 "#
     );
 }

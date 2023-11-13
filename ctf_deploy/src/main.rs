@@ -8,22 +8,19 @@ use aleo_code::*;
 use clap::Parser;
 use prog_args::*;
 
-use std::fs::*;
-use std::path::Path;
-
 use dyn_fmt::AsStrFormatExt;
-
 use snarkvm::prelude::*;
+use std::path::Path;
 
 use crate::{
     deployment::deploy,
-    files::{create_file, create_full_project},
+    files::{create_file, create_full_project, write_pk_file},
 };
 
 type CurrentAleo = snarkvm::circuit::AleoV0;
 type CurrentNetwork = snarkvm::prelude::Testnet3;
 
-fn generate_account(pk_str: &str) -> Result<(PrivateKey<CurrentNetwork>, Address<CurrentNetwork>)> {
+fn load_account(pk_str: &str) -> Result<(PrivateKey<CurrentNetwork>, Address<CurrentNetwork>)> {
     let pk = PrivateKey::from_str(pk_str)?;
     let ck = ComputeKey::try_from(&pk)?;
     let vk = ViewKey::try_from(&pk)?;
@@ -38,6 +35,15 @@ fn generate_account(pk_str: &str) -> Result<(PrivateKey<CurrentNetwork>, Address
     );
 
     Ok((pk, addr))
+}
+
+fn new_account<R: Rng + CryptoRng>(
+    rng: &mut R,
+) -> Result<(PrivateKey<CurrentNetwork>, Address<CurrentNetwork>)> {
+    println!();
+    println!("New Account created:");
+    let pk = PrivateKey::<CurrentNetwork>::new(rng)?;
+    load_account(&pk.to_string())
 }
 
 fn prog_addr(prog_id: &str) -> Result<String> {
@@ -95,6 +101,31 @@ fn create_and_deploy(
     Ok(())
 }
 
+fn get_secret_code(pk: &PrivateKey<CurrentNetwork>) -> Result<String> {
+    let last_5_bytes = pk.to_bytes_le()?.to_vec()[..5].to_vec();
+
+    Ok(u32::from_le_bytes([
+        last_5_bytes[2],
+        last_5_bytes[1],
+        last_5_bytes[3],
+        last_5_bytes[0],
+    ])
+    .to_string()[..5]
+        .to_string())
+}
+
+fn get_unique_player<R: Rng + CryptoRng>(work_path: &Path, rng: &mut R) -> Result<String> {
+    let (pk_player, _) = new_account(rng)?;
+    let program_secret = get_secret_code(&pk_player)?;
+    write_pk_file(work_path, &pk_player.to_string())?;
+    Ok(program_secret)
+}
+
+fn load_unique_player(pk: &str) -> Result<String> {
+    let (pk_player, _) = load_account(pk)?;
+    get_secret_code(&pk_player)
+}
+
 fn main() {
     let params = ProgArgs::try_parse();
     let params: ProgArgs = match params {
@@ -106,15 +137,29 @@ fn main() {
         }
     };
 
-    let index_start = params.start.unwrap_or(0);
-    let index_count = params.count.unwrap_or(1);
-    if index_count < 1 {
-        println!("Deployment count must be at least 1.");
+    if params.count.is_some() && params.pk_player.is_some() {
+        println!("pk-player and count cannot be specified together");
         return;
     }
 
-    if index_start.checked_add(index_count).is_none() {
-        println!("Start/Count combination would overflow.");
+    if params.goose && params.countryman {
+        println!("goose and countryman cannot be specified together");
+        return;
+    }
+
+    if !params.goose && !params.countryman && params.pk_fees.is_none() {
+        println!("specify pk-fees");
+        return;
+    }
+
+    if (params.goose || params.countryman) && params.pk_player.is_none() {
+        println!("goose and countryman require pk-player parameter");
+        return;
+    }
+
+    let index_count = params.count.unwrap_or(1);
+    if index_count < 1 {
+        println!("Deployment count must be at least 1.");
         return;
     }
 
@@ -125,48 +170,26 @@ fn main() {
     }
 
     let mut rng = rand::thread_rng();
-    let pk;
-    if params.pk.is_none() {
-        pk = PrivateKey::new(&mut rng).unwrap();
-        // write pk to file
-        let pk_file = work_path.join("pk.txt");
-        match File::create(&pk_file) {
-            Ok(mut file) => {
-                if let Err(e) = file.write_all(pk.to_string().as_bytes()) {
-                    eprintln!("Error writing '{}': {}", pk_file.display(), e);
-                } else {
-                    println!("'{}' created.", pk_file.display());
-                }
-            }
-            Err(e) => {
-                eprintln!("Error creating '{}': {}", pk_file.display(), e);
-                return;
-            }
-        }
+
+    let (pk_fees, _) = if params.pk_fees.is_some() {
+        load_account(&params.pk_fees.unwrap()).unwrap()
     } else {
-        (pk, _) = generate_account(&params.pk.unwrap()).unwrap();
-    }
+        new_account(&mut rng).unwrap()
+    };
 
     let query_url = params.query.unwrap_or("http://localhost:3030".to_string());
     let broadcast_url = params
         .broadcast
-        .unwrap_or("http://localhst:3030/testnet3/transaction/broadcast".to_string());
+        .unwrap_or("http://localhost:3030/testnet3/transaction/broadcast".to_string());
     let priority_fee = params.fee.unwrap_or(100000);
 
-    for _index_pos in index_start..(index_start + index_count) {
-        // Max u16 = 65535
-        let program_secret = {
-            let last_5_bytes = pk.to_bytes_le().unwrap().to_vec()[..5].to_vec();
-            let last_5_digits = u32::from_le_bytes([
-                last_5_bytes[2],
-                last_5_bytes[1],
-                last_5_bytes[3],
-                last_5_bytes[0],
-            ])
-            .to_string()[..5]
-                .to_string();
-
-            format!("{}", last_5_digits)
+    // Note parameter validation ensures that if
+    // goose or countryman are specified
+    // index_count = 1 and pk_player is set
+    for _index_pos in 0..index_count {
+        let program_secret = match &params.pk_player {
+            Some(pk_player_str) => load_unique_player(pk_player_str).unwrap(),
+            None => get_unique_player(work_path, &mut rng).unwrap(),
         };
 
         if params.goose {
@@ -177,7 +200,7 @@ fn main() {
             create_and_deploy(
                 work_path,
                 &program_secret,
-                &pk,
+                &pk_fees,
                 &query_url,
                 &broadcast_url,
                 priority_fee,
