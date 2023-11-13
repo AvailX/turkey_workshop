@@ -6,9 +6,6 @@ use dyn_fmt::AsStrFormatExt;
 // use snarkvm::prelude::store::*;
 use snarkvm::prelude::*;
 
-type CurrentAleo = snarkvm::circuit::AleoV0;
-type CurrentNetwork = snarkvm::prelude::Testnet3;
-
 use snarkvm::prelude::Result;
 use std::fs::{create_dir, File, OpenOptions};
 use std::path::Path;
