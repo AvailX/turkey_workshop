@@ -177,6 +177,7 @@ Now, we'll proceed by installing Rust and all the CLI tools that we'll need to s
 <summary>
 macOS/Linux
 </summary>
+<br/>
 
 
 ```bash
@@ -248,7 +249,7 @@ macOS/Linux
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
 
-source .{z,ba}shrc
+source ~/.{z,ba}shrc
 
 nvm install node
 ```
@@ -266,6 +267,8 @@ macOS/Linux
 
 ```bash
 curl -fsSL https://get.pnpm.io/install.sh | sh -
+
+source ~/.{z,ba}shrc
 ```
 
 </details>
