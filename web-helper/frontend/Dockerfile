@@ -14,5 +14,7 @@ RUN npm install
 # Copy all files
 COPY . .
 
+EXPOSE 3000
+
 # Run npm start command
 CMD ["npm", "run", "dev"]

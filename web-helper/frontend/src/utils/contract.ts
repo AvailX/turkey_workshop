@@ -1,4 +1,7 @@
+'use client'
+
 import axios from "axios"
+
 
 type apiResponse = {
 	code: string,
@@ -7,10 +10,17 @@ type apiResponse = {
 
 
 const getGooseContract = async (): Promise<apiResponse> => {
-	let url = process.env.API_URL || "http://localhost:8080";
-	let res = await axios.get<apiResponse>(url);
+	try {
+		const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+		console.log("url", url);
+		let res = await axios.get<apiResponse>(url);
+		console.log("res", res.data);
+		return res.data;
+	} catch (err) {
+		console.log("err", err);
+		throw err;
+	}
 
-	return res.data;
 }
 
 
