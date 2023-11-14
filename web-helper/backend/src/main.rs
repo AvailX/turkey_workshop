@@ -25,9 +25,9 @@ const DB_NAME: &str = "avail";
 const COLLECTION_NAME: &str = "keys";
 
 #[actix_web::main]
-async fn main() -> Result<()> {
-    let client_uri = env::var("MONGODB_URI")?;
-    let port: u16 = env::var("PORT")?.parse()?;
+async fn main() -> std::io::Result<()> {
+    let client_uri = env::var("MONGODB_URI").unwrap();
+    let port: u16 = env::var("PORT").unwrap().parse().unwrap();
 
     let subscriber = tracing_subscriber::fmt::Subscriber::builder()
         .with_max_level(tracing::Level::INFO)
@@ -50,27 +50,19 @@ async fn main() -> Result<()> {
 
     HttpServer::new(move || {
         let client = Client::with_options(options.clone()).unwrap();
-        let cors = Cors::default()
-            .allow_any_origin()
-            .allowed_methods(vec!["GET", "POST"])
-            .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
-            .allowed_header(http::header::CONTENT_TYPE)
-            .max_age(3600);
+        let cors = Cors::permissive();
 
         App::new()
             // .wrap(Governor::new(&governor_conf))
             .wrap(cors)
-            .wrap(Logger::default())
+            .wrap(Logger::new("%a %{User-Agent}i"))
             .app_data(Data::new(client.clone()))
             .service(get_code_and_pk)
             .service(insert_code_and_pk)
     })
-    .bind(("127.0.0.1", port))?
+    .bind(("0.0.0.0", port))?
     .run()
     .await
-    .unwrap();
-
-    Ok(())
 }
 
 fn get_key_collection<T>(client: &Client) -> mongodb::Collection<T> {
