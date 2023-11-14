@@ -7,6 +7,6 @@ with open('pks.txt') as f:
 
 	doc = {'keys': pks}
 
-	response = requests.api.post('http://localhost:8080/', json=doc)
+	response = requests.api.post('https://ctf.avail.global/', json=doc)
 
 	print(response.text)
