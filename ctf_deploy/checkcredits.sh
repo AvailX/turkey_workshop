@@ -2,7 +2,7 @@
 
 ADDR_FILE="./deployments/addr.txt"
 BASE_URL="http://37.27.5.0:3030/testnet3/program/credits.aleo/mapping/account"
-EXPECTED_TEXT="200000000u64"
+EXPECTED_TEXT="00000000u64"
 
 # Check if the text file exists
 if [ ! -f "$ADDR_FILE" ]; then
