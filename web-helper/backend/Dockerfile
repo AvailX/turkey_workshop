@@ -18,4 +18,5 @@ FROM ubuntu:22.04 as runtime
 WORKDIR /app
 COPY --from=builder /app/target/release/api /usr/local/bin
 RUN apt-get update && apt-get install -y libcurl4  && rm -rf /var/lib/apt/lists/*
+EXPOSE 5000
 ENTRYPOINT ["/usr/local/bin/api"]
