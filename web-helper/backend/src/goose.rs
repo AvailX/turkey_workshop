@@ -22,9 +22,6 @@ program avail_ctf_goose_{}.aleo {{
         return BHP256::commit_to_field(addr, magic_phrase);
     }}
 
-    transition show_caller() -> public address {{
-        return self.caller;
-    }}
 
     transition lay_egg(magic_phrase: scalar) -> (public address, golden_egg) {{
 
