@@ -2,3 +2,6 @@
 target = 'aarch64-apple-darwin'
 
 [target]
+
+[env]
+RANLIB = '/Users/grongo/Library/Android/sdk/ndk/25.2.9519653/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ranlib'

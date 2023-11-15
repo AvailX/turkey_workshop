@@ -4,48 +4,41 @@ import reactLogo from "./assets/react.svg";
 import "./App.css";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
-  }
+  const [privateKey, setPrivateKey] = useState("");
+  const [programId, setProgramId] = useState("");
+  const [functionName, setFunctionName] = useState("");
 
   return (
-    <div className="container">
-      <h1>Welcome to Tauri!</h1>
-
-      <div className="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <div className="row">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            greet();
-          }}
-        >
+    <div className="App dark-mode">
+      <header className="App-header">
+        <img src={reactLogo} className="App-logo" alt="logo" />
+        <p>
+          <br />
+          <br />
           <input
-            id="greet-input"
-            onChange={(e) => setName(e.currentTarget.value)}
-            placeholder="Enter a name..."
+            className="styled-input"
+            type="text"
+            value={privateKey}
+            onChange={(e) => setPrivateKey(e.target.value)}
           />
-          <button type="submit">Greet</button>
-        </form>
-      </div>
-      <p>{greetMsg}</p>
+          <br />
+          <input
+            className="styled-input"
+            type="text"
+            value={programId}
+            onChange={(e) => setProgramId(e.target.value)}
+          />
+          <br />
+          <input
+            className="styled-input"
+            type="text"
+            value={functionName}
+            onChange={(e) => setFunctionName(e.target.value)}
+          />
+          <br />
+          <button className="styled-button">Execute</button>
+        </p>
+      </header>
     </div>
   );
 }

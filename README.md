@@ -13,7 +13,9 @@
     - [Node.js](#nodejs)
       - [Installing Node.js using nvm](#installing-nodejs-using-nvm)
       - [Installing a (better) node package manager](#installing-a-better-node-package-manager)
-  - [Creating a Tauri project](#creating-a-tauri-project)
+    - [Leo and snarkOS](#leo-and-snarkos)
+      - [Installing Leo v1.10.0](#installing-leo-v1100)
+      - [Installing snarkOS](#installing-snarkos)
 
 ## Pre-requisites
 
@@ -30,8 +32,8 @@ I will assume that macOS users have homebrew, with the Xcode command line tools 
 
 ### Android Studio
 
-We will require Android Studio (*and Xcode from the App Store if you wish to build the
-app for iOS*) and a number of dependencies to successfuly build our app.
+We will require Android Studio (_and Xcode from the App Store if you wish to build the
+app for iOS_) and a number of dependencies to successfuly build our app.
 
 #### Installing Android Studio
 
@@ -85,6 +87,7 @@ Open the app from Launchpad or `open -a Android\ Studio.app`, and follow through
 Select the standard installation setting.
 
 ![img](https://koenig-media.raywenderlich.com/uploads/2015/11/Screen-Shot-2015-11-08-at-8.09.21-PM.png)
+
 </details>
 
 <details>
@@ -179,7 +182,6 @@ macOS/Linux
 </summary>
 <br/>
 
-
 ```bash
 curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
@@ -273,4 +275,57 @@ source ~/.{z,ba}shrc
 
 </details>
 
-## Creating a Tauri project
+### Leo and snarkOS
+
+#### Installing Leo v1.10.0
+
+We're going to use this to compile the Leo program we're going to deploy.
+
+<details>
+<summary>
+macOS/Linux
+</summary>
+
+```bash
+# Download the source code
+git clone https://github.com/AleoHQ/leo
+cd leo
+
+# Install 'leo'
+$ cargo install --path .
+```
+
+</details>
+
+#### Installing snarkOS
+
+We're going to use this to deploy contracts from the CLI.
+
+<details>
+<summary>
+Linux</summary>
+
+```bash
+git clone https://github.com/AleoHQ/snarkOS.git --depth 1
+
+cd snarkOS
+
+./build_ubuntu.sh
+
+cargo install --path .
+```
+
+</details>
+
+<details>
+<summary>macOS</summary>
+
+```bash
+git clone https://github.com/AleoHQ/snarkOS.git --depth 1
+
+cd snarkOS
+
+cargo install --path .
+```
+
+</details>

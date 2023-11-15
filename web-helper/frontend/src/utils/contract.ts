@@ -24,5 +24,4 @@ const getGooseContract = async (): Promise<apiResponse> => {
 }
 
 
-
 export default getGooseContract
