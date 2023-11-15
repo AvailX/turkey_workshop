@@ -329,3 +329,19 @@ cargo install --path .
 ```
 
 </details>
+
+Then we can deploy a program that has been `leo build`'ed by executing
+<br/>
+<br/>
+
+```bash
+export NODE_IP="http://37.27.5.0:3030" 
+export YOURPK="APrivateKey1zkpHCpEoUs1moPtfhb4QZzGH1TPtf3yDssNwA57srpESVbG" 
+
+snarkos  developer  deploy  avail_ctf_countryman_58102.aleo  \
+    --private-key "${YOURPK}" \
+    --path "./build/" \
+    --query "${NODE_IP} \
+    --broadcast "${NODE_IP}/testnet3/transaction/broadcast \
+    --priority-fee 100000
+```
