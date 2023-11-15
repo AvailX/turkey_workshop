@@ -18,12 +18,14 @@ function App() {
           <input
             className="styled-input"
             type="text"
+            placeholder="APrivateKey1zkp..."
             value={privateKey}
             onChange={(e) => setPrivateKey(e.target.value)}
           />
           <br />
           <input
             className="styled-input"
+            placeholder="avail_ctf_countryman_xxx.aleo"
             type="text"
             value={programId}
             onChange={(e) => setProgramId(e.target.value)}
@@ -32,6 +34,7 @@ function App() {
           <input
             className="styled-input"
             type="text"
+            placeholder="some_function"
             value={functionName}
             onChange={(e) => setFunctionName(e.target.value)}
           />
